@@ -16,14 +16,11 @@ public class NetConnectionReceiver {
 
             while (true) {
                 Socket aClientConnection = ss.accept();
-                netModel.getParticipantsConnections().add(aClientConnection);
+                netModel.addConnection(aClientConnection);
 
                 //Detalles de la conexión XD
                 System.out.println("Ip:" + aClientConnection.getInetAddress());
                 System.out.println(" Puerto:" + aClientConnection.getPort());
-
-                //Se crea el hilo que escucha a este cliente
-                new Thread(new NetMessageReceiver(aClientConnection)).start(); //new Thread
             }
 
         } catch (IOException e) {

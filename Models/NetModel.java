@@ -48,12 +48,15 @@ public class NetModel {
         this.user = user;
     }
 
-    public Set<Socket> getConnections() {
+    private Set<Socket> getConnections() {
         return connections;
     }
 
-    public void addParticipant(Socket stablishedConnection) {
+    public synchronized void addConnection(Socket stablishedConnection) {
         connections.add(stablishedConnection);
+
+        //Se crea el hilo que escucha a esta conexión
+        new Thread(new NetMessageReceiver(stablishedConnection)).start(); //new Thread
     }
 
     public void sendMessageToAllConnections(String msg) {

@@ -5,14 +5,25 @@ import Models.NetModel;
 
 public class Controller {
 
+    private static Controller controller;
+
     private NetModel model; 
     private VistaChat vistaChat; 
 
-    public Controller(VistaChat vistaChat, NetModel model) {
+    // ==== Initialazers ====
+    private Controller(VistaChat vistaChat, NetModel model) {
         this.model = model;
         this.vistaChat = vistaChat;
 
         addListeners();
+    }
+
+    public static Controller createInstance(VistaChat vistaChat, NetModel model) {
+        controller = new Controller(vistaChat, model);
+        return controller;
+    }
+    public static Controller getInstance() {
+        return controller;
     }
 
 

@@ -1,7 +1,10 @@
 package Models;
 
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.Socket;
+
+import Controllers.Controller;
 
 
 //Recibe mensajes
@@ -10,7 +13,6 @@ import java.net.Socket;
 public class NetMessageReceiver implements Runnable{
     
     Socket connection;
-    //DatagramPacket data = new DatagramPacket(new byte[1024], 1024);
 
     public NetMessageReceiver (Socket connection) {
         this.connection = connection;
@@ -21,8 +23,17 @@ public class NetMessageReceiver implements Runnable{
         
         while (true) {
             
-            //socket.receive()
-            //Se coge la conexión y se pasa
+            try {
+
+                String msg = connection.getInputStream().readAllBytes().toString();
+                Controller.getInstance().unMetodoParaPasarElMensaje(msg);
+
+            } catch (IOException e) {
+
+                System.out.println("Se perdió un mensaje del host " + connection.getInetAddress());
+                e.printStackTrace();
+
+            }
             
         }
         

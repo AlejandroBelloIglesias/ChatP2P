@@ -65,7 +65,7 @@ class FinderThread implements Runnable {
 
             System.out.println("Se aceptó la conexión con " + ip);
 
-            NetModel.getInstance().addParticipant(possibleConnection);
+            NetModel.getInstance().addConnection(possibleConnection);
 
         } catch (IOException e) {
             //System.out.println("No se aceptó la conexión con " + ip);
