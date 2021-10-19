@@ -1,4 +1,4 @@
-package Models;
+/*package Models;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,17 +12,13 @@ import java.util.StringTokenizer;
 
 public class NetConnectionFinder {
 
-    //Singleton
-    static NetConnectionFinder connectionFinder = new NetConnectionFinder();
     ArrayList<Socket> l = new ArrayList<>();
     boolean ready = false;
 
-    private NetConnectionFinder() {}
+    public NetConnectionFinder() {
 
-    //Singleton
-    public static NetConnectionFinder getInstance() {
-        return connectionFinder;
     }
+
 
     public void findLocalConnections(String ownIp, String mask, int port) {
 
@@ -74,3 +70,4 @@ class FinderThread implements Runnable {
     }
 
 }
+*/

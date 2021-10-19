@@ -3,40 +3,41 @@ package Models;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
+import java.net.MulticastSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
-public class NetModel {
+import Controllers.Controller;
+import Patterns.IObservable;
+import Patterns.IObserver;
 
-    //Patrón Singleton
-    static NetModel netModelSingleton = new NetModel();
-    String myIP;
+public class NetModel implements IObservable{
 
-    String user = "undefined";
-    Set<Socket> connections = new HashSet<>(); //Es un set porque no queremos que haya repeticiones
+    private ArrayList<IObserver> observers = new ArrayList<>();
 
-    private NetModel () {
+    public String myIP;
+    public String user = "undefined";
 
-        var connectionReceiver = new NetConnectionReceiver(); //???
+    //Multicast
+    public NetMulticast multicastSender;
 
-        //Set ip
+    // ==== __INIT__ ====
+
+    public NetModel() {
+
+        // Set ip
         try {
             myIP = InetAddress.getLocalHost().getHostAddress();
-            // new NetConnectionSender()?
         } catch (UnknownHostException e) {
             e.printStackTrace();
             System.out.println("No tienes bien configurado internet!");
             System.exit(0);
         }
-    }
-
-    //Patrón Singleton
-    public static NetModel getInstance() {
-        return netModelSingleton;
     }
 
     // ==== GETTERS && SETTERS
@@ -48,30 +49,40 @@ public class NetModel {
         this.user = user;
     }
 
-    private Set<Socket> getConnections() {
-        return connections;
+    // ==== MULTICAST ====
+    public void login() {
+
+        //Solo al hacer login se inicializa la red multicast
+        multicastSender = new NetMulticast(this);
+
     }
 
-    public synchronized void addConnection(Socket stablishedConnection) {
-        connections.add(stablishedConnection);
 
-        //Se crea el hilo que escucha a esta conexión
-        new Thread(new NetMessageReceiver(stablishedConnection)).start(); //new Thread
+    // ==== OBSERVABLE ====
+    @Override
+    public void addObserver(IObserver observer) {
+        observers.add(observer);
     }
 
-    public void sendMessageToAllConnections(String msg) {
-
-        connections.forEach(
-            (socket) -> {
-                try {
-                    socket.getOutputStream().write(msg.getBytes());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        );
-        
+    @Override
+    public void delObserver(IObserver observer) {
+        observers.remove(observer);
     }
 
+    @Override
+    public void notifyObservers() {  
+        Iterator<IObserver> it = observers.iterator();
+        while (it.hasNext()) {
+            it.next().update(this);
+        }
+    }
+
+    @Override
+    public synchronized void notifyObservers(Object args) {
+        Iterator<IObserver> it = observers.iterator();
+        while (it.hasNext()) {
+            it.next().update(this, args);
+        }
+    }
 
 }

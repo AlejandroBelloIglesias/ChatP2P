@@ -11,24 +11,31 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
+import javax.swing.text.JTextComponent;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 
 public class VistaChat extends JFrame{
 
-    JFrame ventana = new JFrame("Chat de Alecs Beio");
-    JPanel panel;
-    JPanel norte;
-    JPanel centro;
-    JPanel sur;
-    JButton btn_login, btn_logout, btn_send;
-    JTextField txt_nombre;
-    JTextArea txt_mensaje;
+    private JFrame ventana = new JFrame("Chat de Alecs Beio");
+    private JPanel panel;
+    private JPanel norte;
+    private JPanel centro;
+    private JPanel sur; 
+    private JButton btn_login, btn_logout, btn_send;
+    private JTextField txt_nombre;
+    private JTextArea txt_mensaje;
 
-    Vector vectorMensajes = new Vector();
-    JList listaMensajes = new JList(vectorMensajes);
-    JScrollPane scroll = new JScrollPane(listaMensajes);
+    private Vector<String> vectorMensajes;
+    private JList<String> listaMensajes;
+    private JScrollPane scroll;
+
+    public JTextPane test = new JTextPane();
+
+    // ==== __INIT __ ====
 
     public VistaChat() {
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -41,8 +48,6 @@ public class VistaChat extends JFrame{
 
         ventana.pack();
         ventana.setSize(600, 600);
-
-
 
         ventana.setVisible(true);
     }
@@ -82,7 +87,15 @@ public class VistaChat extends JFrame{
         centro.setBorder(BorderFactory.createTitledBorder("Chat"));
 
         // Contenido del panel Centro
-        //No hay, lol
+
+        vectorMensajes = new Vector<>();
+        listaMensajes = new JList<>();
+ 
+        scroll = new JScrollPane(test);
+
+        //centro.add(scroll); //Voy a usar simplemente un textfield
+        centro.add(scroll);
+        
 
         panel.add(centro, BorderLayout.CENTER);
     }
