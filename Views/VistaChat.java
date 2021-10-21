@@ -42,6 +42,7 @@ public class VistaChat extends JFrame{
 
     public VistaChat() {
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        test.setEditable(false);
 
         //Creación de paneles
         panelPrincipal();

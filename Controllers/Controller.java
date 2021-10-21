@@ -44,8 +44,9 @@ public class Controller implements IObserver{
         });
 
         vistaChat.getBtn_logout().addActionListener((e) -> {
-            System.out.println("logout");
-            System.out.println(vistaChat.getTxt_nombre().getText());
+            
+            model.multicastSender.send(vistaChat.getTxt_nombre().getText() + " ha abandonado el chat.");
+            System.exit(0);
 
             // Send "X Ha salido del Chat"
             // Borrar al participante de la lista de participantes para que no se envíen
@@ -89,12 +90,12 @@ public class Controller implements IObserver{
     //Se ejecuta cuando en Net llega un mensaje
     @Override
     public void update(IObservable observable) {
-        System.out.println("Controller NOTIFIED!");        
+        //System.out.println("Controller NOTIFIED! without ARGS");        
     }
 
     @Override
     public void update(IObservable observable, Object args) {
-        System.out.println("Controller NOTIFIED! with ARGS");
+        //System.out.println("Controller NOTIFIED! with ARGS");
         String msg = (String) args;    
         addMessageToGUI(msg);
     }
