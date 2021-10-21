@@ -22,13 +22,25 @@ public class NetModel implements IObservable{
 
     public String myIP;
     public String user = "undefined";
-
+ 
     //Multicast
-    public NetMulticast multicastSender;
+    public MulticastSocket ms;
+    public NetMulticastSender multicastSender;
+    public NetMulticastReceiver multicastReceiver;
 
     // ==== __INIT__ ====
 
     public NetModel() {
+        
+        try {
+            ms = new MulticastSocket(Constants.PORT);
+            ms.joinGroup(InetAddress.getByName(Constants.IP));
+        } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+            System.out.println("No se pudo iniciar la conexión al socket multicast");
+            System.exit(0);
+        }
 
         // Set ip
         try {
@@ -53,7 +65,25 @@ public class NetModel implements IObservable{
     public void login() {
 
         //Solo al hacer login se inicializa la red multicast
-        multicastSender = new NetMulticast(this);
+
+        // RECEIVER
+        multicastReceiver = new NetMulticastReceiver(this, ms);
+        Thread r = new Thread(multicastReceiver);
+        r.start();
+
+        // SENDER
+        multicastSender = new NetMulticastSender(this, ms);
+        
+        //No tiene por qué ser un hilo
+        /*Thread e = new Thread(multicastSender); 
+        e.start();*/
+
+/*
+        e.join();
+        System.out.println("Receptor finalizo hilo");
+        r.join();
+        System.out.println("Emisor finalizo hilo");
+*/
 
     }
 

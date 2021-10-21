@@ -1,5 +1,6 @@
 package Views;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -29,17 +30,19 @@ public class VistaChat extends JFrame{
     private JTextField txt_nombre;
     private JTextArea txt_mensaje;
 
-    private Vector<String> vectorMensajes;
-    private JList<String> listaMensajes;
+    //Mensajes
+    //private Vector<String> vectorMensajes;
+    private ArrayList<ChatEntry> entriesArrayList;
+    private JList<ChatEntry> listaMensajes;
     private JScrollPane scroll;
-
+    
     public JTextPane test = new JTextPane();
 
     // ==== __INIT __ ====
 
     public VistaChat() {
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
+
         //Creación de paneles
         panelPrincipal();
         panelNorte();
@@ -87,10 +90,10 @@ public class VistaChat extends JFrame{
         centro.setBorder(BorderFactory.createTitledBorder("Chat"));
 
         // Contenido del panel Centro
-
-        vectorMensajes = new Vector<>();
-        listaMensajes = new JList<>();
- 
+/*
+        entriesArrayList = new ArrayList<>();
+        listaMensajes = new JList<ChatEntry>( new Vector(entriesArrayList) ); //
+        */
         scroll = new JScrollPane(test);
 
         //centro.add(scroll); //Voy a usar simplemente un textfield
@@ -117,6 +120,18 @@ public class VistaChat extends JFrame{
         sur.add(btn_send);
 
         panel.add(sur, BorderLayout.SOUTH);
+    }
+
+    public void addMessageToGUI(String msg) {
+
+        centro.add(scroll);
+        test.setText( test.getText() + "\n" + msg);
+
+
+        //vistaChat.getEntries().add( new ChatEntry(msg) );
+        //SwingUtilities.updateComponentTreeUI(vistaChat.getListaMensajes());
+        
+        //SIMPLIFICAR: SI SE CAMBIA ALGO DE LA VISTA ESTO DEBERÍA QUEDARSE IGUAL
     }
 
     // ==== Getters && Setters ====
@@ -201,12 +216,17 @@ public class VistaChat extends JFrame{
         this.txt_mensaje = txt_mensaje;
     }
 
+    /*
     public Vector getVectorMensajes() {
         return vectorMensajes;
     }
 
     public void setVectorMensajes(Vector vectorMensajes) {
         this.vectorMensajes = vectorMensajes;
+    }
+*/
+    public ArrayList<ChatEntry> getEntries() {
+        return entriesArrayList;
     }
 
     public JList getListaMensajes() {

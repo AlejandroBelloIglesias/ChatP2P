@@ -2,7 +2,9 @@ package Models;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
+import java.net.InetAddress;
 import java.net.MulticastSocket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -19,23 +21,39 @@ class NetMulticastReceiver implements Runnable{
     @Override
     public void run() {
         
-        //NO SE POR QUÉ NO HACE FALTA EL WHILE XD
+        while (true) {
 
-        //Paquete para RECIBIR
-        DatagramPacket dp = new DatagramPacket(
-            new byte [Constants.BUFFER_SIZE], 
-            Constants.BUFFER_SIZE
-        );
+            byte[] datos = new byte[Constants.BUFFER_SIZE];
 
-        try {
-            ms.receive(dp);
-            System.out.println("SE HA RECIBIDO ALGO!!!");
-            owner.notifyObservers( (Object) new String (dp.getData()) );
+            //Paquete para RECIBIR
+            DatagramPacket dp;
+            try {
+                
+                dp = new DatagramPacket(
+                    datos, 
+                    datos.length,
+                    InetAddress.getByName(Constants.IP),
+                    Constants.PORT
+                );
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }       
-        
+                ms.receive(dp);
+                datos = dp.getData();
+                System.out.println("SE HA RECIBIDO ALGO!!!");
+
+                System.out.println("ip origen: "+ dp.getAddress());
+                System.out.println("puerto origen: "+ dp.getPort());
+                System.out.println(new String(datos));
+            
+                owner.notifyObservers( (Object) new String (datos) );
+
+
+            } catch (UnknownHostException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }catch (IOException e) {
+                e.printStackTrace();
+            }        
+        }    
     }
     
 }

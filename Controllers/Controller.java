@@ -1,5 +1,6 @@
 package Controllers;
 
+import Views.ChatEntry;
 import Views.VistaChat;
 
 import java.awt.event.ActionEvent;
@@ -32,11 +33,13 @@ public class Controller implements IObserver{
     public void addListeners() {
 
         vistaChat.getBtn_login().addActionListener((e) -> {
-            System.out.println("login");
-            System.out.println(vistaChat.getTxt_nombre().getText());
+
+            //System.out.println("login");
+            //System.out.println(vistaChat.getTxt_nombre().getText());
             // TCP (TODO): Solicita conexión con ServerSocket() de cada participante 
 
             model.login();
+            model.setUser(vistaChat.getTxt_nombre().getText());
             model.multicastSender.send(vistaChat.getTxt_nombre().getText() + " ha hecho login.");
         });
 
@@ -76,11 +79,9 @@ public class Controller implements IObserver{
 
     public void sendMessage() {
         
-        System.out.println("send");
-        System.out.println(vistaChat.getTxt_nombre().getText());
+        model.multicastSender.send(model.getUser() + ": " +  vistaChat.getTxt_mensaje().getText());
 
-        vistaChat.getTxt_mensaje().setText("");        
-        
+        vistaChat.getTxt_mensaje().setText("");    
     }
 
 
@@ -98,26 +99,9 @@ public class Controller implements IObserver{
         addMessageToGUI(msg);
     }
 
+    //Método delegator
     public void addMessageToGUI(String msg ) {
-        
-        //vistaChat.getVectorMensajes().add(msg);
-
-        
-        //vistaChat.getScroll().setSize(vistaChat.getCentro().getWidth(), vistaChat.getCentro().getHeight());
-        //vistaChat.getScroll().setVisible(true);
-
-        //vistaChat.getListaMensajes().setSize(vistaChat.getCentro().getWidth(), vistaChat.getCentro().getHeight());
-        //vistaChat.getListaMensajes().setVisible(true);
-
-
-        //vistaChat.getScroll().updateUI();
-
-        vistaChat.getCentro().add(vistaChat.getScroll());
-
-        //SwingUtilities.updateComponentTreeUI(vistaChat.getListaMensajes());
-
-        vistaChat.test.setText( vistaChat.test.getText() + "\n" + msg);
-
+        vistaChat.addMessageToGUI(msg);
     }
 
 }
