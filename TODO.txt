@@ -1,0 +1,33 @@
+
+//TODO
+
+
+==== Funcionalidad ====
+-- Forzar al usuario a hacer logout en vez de cerrar la ventana o al cerrar la ventana
+
+	-- Gestionar estados: online (Al hacer login ++ / logout --)
+	
+-- Deshabilitar todo si no se ha logeado
+-- Gestión de versiones (Avisar al usuario de actualizaciones)
+-- Alertas por cada nuevo mensaje + check de silenciar
+-- Encriptación (check + clave)
+
+==== Estética ====
+-- Añadir tarjetas/bocadillos de chat con colores (Tus propios mensajes aparecerían a la derecha)
+-- Colores personalizados y seleccionables
+-- Mejoras generales de interfaz
+-- Separación de vistas / menús:
+	
+	Menú de login + aviso de quita de responsabilidad
+	Menú de lista de chats (Genérico o un "+" para añadir chats directos)
+	Menú del chat
+
+
+==== I/O ====
+-- Posibilidad de abrir una conexión a una IP concreta
+-- Posibilidad de enviar archivos/imágenes/dibujos(?
+
+
+
+
+//ALREADY DONE
