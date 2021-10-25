@@ -1,18 +1,20 @@
 
 //TODO
 
-
 ==== Funcionalidad ====
--- Forzar al usuario a hacer logout en vez de cerrar la ventana o al cerrar la ventana
 
-	-- Gestionar estados: online (Al hacer login ++ / logout --)
+-- Lista de online de usuarios y no de IP's (relativamente difícil hacerlo bien)
+
+	-- Posibilidad de hacerlo: Crear una clase que herede de DatagramPacket y que en ella se envíe el String user que emite el paquete
+	-- Si el cast a esa clase falla, se añadirá la IP en vez de el usuario
 	
--- Deshabilitar todo si no se ha logeado
 -- Gestión de versiones (Avisar al usuario de actualizaciones)
 -- Alertas por cada nuevo mensaje + check de silenciar
 -- Encriptación (check + clave)
 
+
 ==== Estética ====
+
 -- Añadir tarjetas/bocadillos de chat con colores (Tus propios mensajes aparecerían a la derecha)
 -- Colores personalizados y seleccionables
 -- Mejoras generales de interfaz
@@ -31,3 +33,17 @@
 
 
 //ALREADY DONE
+
+==== Funcionalidad ====
+
+-- Forzar al usuario a hacer logout en vez de cerrar la ventana o al cerrar la ventana
+-- Deshabilitar todo si no se ha logeado
+-- Gestionar estados: online (Al hacer login ++ / logout --)
+
+
+
+
+==== Estética ====
+
+
+==== I/O ====

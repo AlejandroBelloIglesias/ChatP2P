@@ -7,6 +7,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -15,6 +18,8 @@ import javax.swing.SwingUtilities;
 import Models.NetModel;
 import Patterns.IObservable;
 import Patterns.IObserver;
+
+import java.net.InetAddress;
 
 public class Controller implements IObserver{
 
@@ -41,6 +46,7 @@ public class Controller implements IObserver{
             model.login();
             model.setUser(vistaChat.getTxt_nombre().getText());
             model.multicastSender.send(vistaChat.getTxt_nombre().getText() + " ha hecho login.");
+            vistaChat.login();
         });
 
         vistaChat.getBtn_logout().addActionListener((e) -> {
@@ -48,11 +54,11 @@ public class Controller implements IObserver{
             model.multicastSender.send(vistaChat.getTxt_nombre().getText() + " ha abandonado el chat.");
             System.exit(0);
 
-            // Send "X Ha salido del Chat"
             // Borrar al participante de la lista de participantes para que no se envíen
             // paquetes sin destino
             // La "X" del frame DEBERÁ EJECUTAR ESTE MÉTODO
-            // System.exit(0);
+
+            vistaChat.logout();
         });
 
         vistaChat.getBtn_send().addActionListener( (e) -> sendMessage() );
@@ -94,10 +100,13 @@ public class Controller implements IObserver{
     }
 
     @Override
-    public void update(IObservable observable, Object args) {
-        //System.out.println("Controller NOTIFIED! with ARGS");
-        String msg = (String) args;    
+    public void update(IObservable observable, Object[] args) {
+
+        String msg = (String) args[0];    
         addMessageToGUI(msg);
+
+        Map<InetAddress,String> onlineUsers = (Map) args[1]; //Debería poder ser null
+        vistaChat.updateOnlineUsers(onlineUsers);
     }
 
     //Método delegator

@@ -38,13 +38,21 @@ class NetMulticastReceiver implements Runnable{
 
                 ms.receive(dp);
                 datos = dp.getData();
-                System.out.println("SE HA RECIBIDO ALGO!!!");
 
                 System.out.println("ip origen: "+ dp.getAddress());
                 System.out.println("puerto origen: "+ dp.getPort());
                 System.out.println(new String(datos));
-            
-                owner.notifyObservers( (Object) new String (datos) );
+
+                if ( !owner.isOnline(dp.getAddress()) ) {
+                    owner.addOnline(dp.getAddress(), "");
+                }
+             
+                Object[] args = {
+                    (Object) new String (datos), 
+                    (Object) owner.getOnlineUsers() //Debería poder ser null
+                };
+
+                owner.notifyObservers( args );
 
 
             } catch (UnknownHostException e1) {
@@ -55,5 +63,11 @@ class NetMulticastReceiver implements Runnable{
             }        
         }    
     }
+
+    /*
+    public String getUserFromLoginMessage () {
+
+        return "";
+    }*/
     
 }

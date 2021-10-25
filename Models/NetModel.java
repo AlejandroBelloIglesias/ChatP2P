@@ -7,9 +7,12 @@ import java.net.MulticastSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.security.KeyStore.Entry;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import Controllers.Controller;
@@ -19,6 +22,7 @@ import Patterns.IObserver;
 public class NetModel implements IObservable{
 
     private ArrayList<IObserver> observers = new ArrayList<>();
+    private Map<InetAddress,String> onlineUsers = new HashMap<>();
 
     public String myIP;
     public String user = "undefined";
@@ -52,6 +56,19 @@ public class NetModel implements IObservable{
         }
     }
 
+    public boolean isOnline (InetAddress ip) {
+        return onlineUsers.containsKey(ip);
+    }
+
+    public void addOnline (InetAddress ip, String user) {
+        onlineUsers.put(ip, user);
+    }
+
+    public void removeOnline(InetAddress ip) {
+        onlineUsers.remove(ip);
+    }
+
+
     // ==== GETTERS && SETTERS
     public String getUser() {
         return user;
@@ -64,8 +81,6 @@ public class NetModel implements IObservable{
     // ==== MULTICAST ====
     public void login() {
 
-        //Solo al hacer login se inicializa la red multicast
-
         // RECEIVER
         multicastReceiver = new NetMulticastReceiver(this, ms);
         Thread r = new Thread(multicastReceiver);
@@ -74,17 +89,6 @@ public class NetModel implements IObservable{
         // SENDER
         multicastSender = new NetMulticastSender(this, ms);
         
-        //No tiene por qué ser un hilo
-        /*Thread e = new Thread(multicastSender); 
-        e.start();*/
-
-/*
-        e.join();
-        System.out.println("Receptor finalizo hilo");
-        r.join();
-        System.out.println("Emisor finalizo hilo");
-*/
-
     }
 
 
@@ -108,11 +112,15 @@ public class NetModel implements IObservable{
     }
 
     @Override
-    public synchronized void notifyObservers(Object args) {
+    public synchronized void notifyObservers(Object[] args) {
         Iterator<IObserver> it = observers.iterator();
         while (it.hasNext()) {
             it.next().update(this, args);
         }
+    }
+
+    public Map<InetAddress,String> getOnlineUsers() {
+        return onlineUsers;
     }
 
 }
