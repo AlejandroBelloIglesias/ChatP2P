@@ -47,3 +47,5 @@
 
 
 ==== I/O ====
+
+test vscode desde android (web)
